@@ -17,6 +17,6 @@ func main(){
 	fmt.Print("DateTime:", tm.Format(df), "\n")
 	boot, err := exec.Command("clear").CombinedOutput()
 	if err != nil {
-		log.Print("Error NotClearScreen\n",boot)
+		log.Print("Error NotClearScreen\n",string(boot))
 	}
 }
