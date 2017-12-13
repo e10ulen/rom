@@ -2,8 +2,6 @@ package main
 
 import (
 	"os"
-	"os/exec"
-	"log"
 	"fmt"
 	"time"
 )
@@ -15,8 +13,5 @@ func main(){
 		fmt.Print(dir, "\n")
 	}
 	fmt.Print("DateTime:", tm.Format(df), "\n")
-	boot, err := exec.Command("clear").CombinedOutput()
-	if err != nil {
-		log.Print("Error NotClearScreen\n",string(boot))
-	}
+
 }
