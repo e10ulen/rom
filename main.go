@@ -31,6 +31,7 @@ func loadFile(dn string,fp string)  {
 	files, err := ioutil.ReadDir(dn)
 	if err != nil {
 		fmt.Print("Not Load Dir")
+		makeDir(dn)
 	}
 	for _, file := range files {
 		fmt.Println("ReadDir:",file.Name())
@@ -51,30 +52,10 @@ func loadFile(dn string,fp string)  {
 	}
 	fmt.Print("File contents: ", string(content), "\n")
 }
-func createFile(fp string)  {
-	file, err := os.OpenFile(fp, os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	fmt.Fprintln(file, "Hello")
-}
-
 func touchFile()  {
 	file, err := exec.Command("touch", "src/hello").CombinedOutput()
 	if err != nil {
 		log.Print("Error...Touch\n",string(file),"\n")
-	}
-}
-
-func readDir(dn string)  {
-	files, err := ioutil.ReadDir(dn)
-	if err != nil {
-		fmt.Print("Not Load Dir")
-	}
-	for _, file := range files {
-		fmt.Println("ReadDir:",file.Name())
 	}
 }
 
@@ -83,14 +64,4 @@ func makeDir(dn string)  {
 	if err != nil {
 		log.Print("Error...Mkdir\n",string(mkdir),"\n")
 	}
-}
-func readFile()  {
-
-	content, err := ioutil.ReadFile("src/hello")
-	if err != nil {
-		log.Print(err)
-	}
-
-	fmt.Print("File contents: ", string(content), "\n")
-
 }
