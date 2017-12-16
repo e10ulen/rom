@@ -14,7 +14,7 @@ func main() {
 		fmt.Print(dir, "\n")
 	}
 	dn := "src"
-	fp := "src/hello"
+	fp := dn+"/hello"
 	loadFile(dn,fp)
 	// readDir(dn)
 	// makeDir(dn)
@@ -31,34 +31,28 @@ func loadFile(dn string,fp string)  {
 	files, err := ioutil.ReadDir(dn)
 	if err != nil {
 		fmt.Print("Not Load Dir")
+		//	dirがなければmakeDirに飛んでdirを作り、帰ってくる。
 		makeDir(dn)
 	}
 	for _, file := range files {
 		fmt.Println("ReadDir:",file.Name())
 	}
 	//	createFile部分
-	file, err := os.OpenFile(fp, os.O_APPEND|os.O_WRONLY, 0600)
+	cfile, err := os.OpenFile(fp, os.O_APPEND|os.O_CREATE, 0600)
 	if err != nil {
 		log.Print(err)
 	}
-	defer file.Close()
+	defer cfile.Close()
 
-	fmt.Fprintln(file, "Hello")
+	fmt.Fprintln(cfile, "Hello")
 
 	//	readFile部分
-	content, err := ioutil.ReadFile("src/hello")
+	content, err := ioutil.ReadFile(fp)
 	if err != nil {
 		log.Print(err)
 	}
 	fmt.Print("File contents: ", string(content), "\n")
 }
-func touchFile()  {
-	file, err := exec.Command("touch", "src/hello").CombinedOutput()
-	if err != nil {
-		log.Print("Error...Touch\n",string(file),"\n")
-	}
-}
-
 func makeDir(dn string)  {
 	mkdir, err := exec.Command("mkdir", dn).CombinedOutput()
 	if err != nil {
