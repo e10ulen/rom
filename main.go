@@ -30,8 +30,7 @@ func loadFile(dn string,fp string)  {
 	//	readDir部分
 	files, err := ioutil.ReadDir(dn)
 	if err != nil {
-		fmt.Print("Not Load Dir")
-		//	dirがなければmakeDirに飛んでdirを作り、帰ってくる。
+		//	dirがなければmakeDirに飛んでdirを作り、帰ってきて続行する。
 		makeDir(dn)
 	}
 	for _, file := range files {
