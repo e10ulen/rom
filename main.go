@@ -1,29 +1,73 @@
 package main
 
 import (
-	"os"
 	"fmt"
-	"time"
-	"bufio"
+	"os"
+	"os/exec"
+	"io/ioutil"
+	"log"
 )
-const df = "2006/01/02 15:04"
-func main(){
-	tm := time.Now()
+
+func main() {
 	dir, err := os.Getwd()
 	if err == nil {
 		fmt.Print(dir, "\n")
 	}
-	fmt.Print("DateTime:", tm.Format(df), "\n")
-//	Scan Stdin
-	scr := bufio.NewScanner(os.Stdin)
-	fmt.Print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nScan Text > ")
-	for scr.Scan(){
-			fmt.Println(scr.Text())
-			if scr.Text() == string("exit") {
-				os.Exit(0)
-			}
+	dn := "src"
+	fp := "src/hello"
+	readDir(dn)
+	makeDir(dn)
+	readDir(dn)
+	readFile()
+
+	touchFile()
+	createFile(fp)
+	readFile()
+}
+// htmlソースを読み込んで、htmlの中に規定の記述があればロードしてある別のファイルを挿入する
+func loadFile()  {
+
+}
+func createFile(fp string)  {
+	file, err := os.OpenFile(fp, os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		log.Fatal(err)
 	}
-	if err := scr.Err();err != nil {
-		fmt.Fprintln(os.Stderr, "readinf standerd input", err)
+	defer file.Close()
+
+	fmt.Fprintln(file, "Hello")
+}
+
+func touchFile()  {
+	file, err := exec.Command("touch", "src/hello").CombinedOutput()
+	if err != nil {
+		log.Print("Error...Touch\n",string(file),"\n")
 	}
+}
+
+func readDir(dn string)  {
+	files, err := ioutil.ReadDir(dn)
+	if err != nil {
+		fmt.Print("Not Load Dir")
+	}
+	for _, file := range files {
+		fmt.Println("ReadDir:",file.Name())
+	}
+}
+
+func makeDir(dn string)  {
+	mkdir, err := exec.Command("mkdir", dn).CombinedOutput()
+	if err != nil {
+		log.Print("Error...Mkdir\n",string(mkdir),"\n")
+	}
+}
+func readFile()  {
+
+	content, err := ioutil.ReadFile("src/hello")
+	if err != nil {
+		log.Print(err)
+	}
+
+	fmt.Print("File contents: ", string(content), "\n")
+
 }
